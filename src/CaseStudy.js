@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Case study data
 const caseStudies = {
@@ -275,9 +275,9 @@ const caseStudies = {
 };
 
 // Color configuration
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
-const DAOColor = '#0088FE';
-const CorporateColor = '#00C49F';
+const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EC4899', '#8B5CF6'];
+const DAOColor = '#4F46E5';
+const CorporateColor = '#10B981';
 
 const CaseStudy = () => {
   const { caseId } = useParams();
@@ -285,11 +285,11 @@ const CaseStudy = () => {
 
   if (!caseStudy) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-lg">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="card p-8 max-w-lg text-center">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Case Study Not Found</h1>
-          <p className="text-gray-700 mb-6">The case study you're looking for doesn't exist or has been moved.</p>
-          <Link to="/" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <p className="text-muted mb-6">The case study you're looking for doesn't exist or has been moved.</p>
+          <Link to="/" className="btn btn-primary">
             Return to Dashboard
           </Link>
         </div>
@@ -297,78 +297,66 @@ const CaseStudy = () => {
     );
   }
 
-  const { 
-    title, type, organization, summary, background, timeline, 
-    challenges, outcomes, insights, metrics 
+  const {
+    title, type, organization, summary, background, timeline,
+    challenges, outcomes, insights, metrics
   } = caseStudy;
 
-  const themeColor = type === 'dao' ? 'blue' : 'green';
   const accentColor = type === 'dao' ? DAOColor : CorporateColor;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">DAO Governance Dashboard</h1>
-          <p className="mt-2 text-gray-600">Case Study Analysis</p>
+    <div className="min-h-screen">
+      <header className="glass-header">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold gradient-text">DAO Governance Dashboard</h1>
+            <p className="mt-2 text-muted">Case Study Analysis</p>
+          </div>
+          <Link to="/" className="btn btn-ghost">← Back to Dashboard</Link>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
         {/* Case Study Header */}
-        <div className={`bg-${themeColor}-50 rounded-lg shadow-md p-6 mb-6 border-l-4 border-${themeColor}-500`}>
+        <div className={`card p-8 mb-8 border-l-4 ${type === 'dao' ? 'border-l-blue-600' : 'border-l-green-600'}`}>
           <div className="flex justify-between items-start">
             <div>
-              <span className={`inline-block px-3 py-1 text-sm text-white bg-${themeColor}-600 rounded-full mb-2`}>
+              <span className={`inline-block px-3 py-1 text-sm text-white rounded-full mb-3 ${type === 'dao' ? 'bg-blue-600' : 'bg-green-600'}`}>
                 {type === 'dao' ? 'DAO Case Study' : 'Corporate Case Study'}
               </span>
-              <h2 className="text-3xl font-bold mb-1">{title}</h2>
-              <p className="text-xl text-gray-700">{organization}</p>
+              <h2 className="text-3xl font-bold mb-2">{title}</h2>
+              <p className="text-xl text-muted">{organization}</p>
             </div>
-            <Link to="/" className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 text-sm">
-              Back to Dashboard
-            </Link>
           </div>
-          <p className="mt-4 text-gray-700 font-medium">{summary}</p>
+          <p className="mt-6 text-lg font-medium leading-relaxed">{summary}</p>
         </div>
 
         {/* Background and Overview */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="card p-8 mb-8">
           <h2 className="text-2xl font-bold mb-4">Background</h2>
-          <p className="text-gray-700">{background}</p>
+          <p className="text-muted leading-relaxed">{background}</p>
         </div>
 
         {/* Timeline */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-bold mb-4">Governance Timeline</h2>
-          <div className="relative">
+        <div className="card p-8 mb-8">
+          <h2 className="text-2xl font-bold mb-8">Governance Timeline</h2>
+          <div className="relative pl-4 border-l-2 border-gray-200 ml-4">
             {timeline.map((item, index) => (
-              <div key={`timeline-${index}`} className="mb-8 relative">
-                <div className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className={`w-8 h-8 rounded-full bg-${themeColor}-500 flex items-center justify-center text-white`}>
-                      {index + 1}
-                    </div>
-                    {index < timeline.length - 1 && (
-                      <div className={`w-1 h-full bg-${themeColor}-200 my-1`}></div>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold">{item.step}</h3>
-                    <p className={`text-sm text-${themeColor}-600 font-medium mb-1`}>{item.date}</p>
-                    <p className="text-gray-700">{item.description}</p>
-                  </div>
-                </div>
+              <div key={`timeline-${index}`} className="mb-8 relative pl-8">
+                <div className={`absolute -left-[21px] top-1 w-4 h-4 rounded-full border-2 border-white ${type === 'dao' ? 'bg-blue-500' : 'bg-green-500'}`}></div>
+                <h3 className="text-lg font-bold">{item.step}</h3>
+                <p className={`text-sm font-semibold mb-1 ${type === 'dao' ? 'text-blue-600' : 'text-green-600'}`}>{item.date}</p>
+                <p className="text-muted">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Visualizations */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Participation Chart */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4">Voter Participation</h3>
+          <div className="card p-6">
+            <h3 className="text-lg font-bold mb-4">Voter Participation</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
@@ -376,40 +364,42 @@ const CaseStudy = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius={80}
+                  outerRadius={70}
                   fill={accentColor}
                   dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                 >
                   {metrics.voterParticipation.map((entry, index) => (
                     <Cell key={`cell-participation-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ borderRadius: '0.5rem', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
               </PieChart>
             </ResponsiveContainer>
+            <div className="text-center mt-2 text-sm text-muted">Voting vs Non-voting</div>
           </div>
-          
+
           {/* Timeline Chart */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4">Implementation Timeline</h3>
+          <div className="card p-6">
+            <h3 className="text-lg font-bold mb-4">Implementation Timeline</h3>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart
                 layout="vertical"
                 data={metrics.timeToImplement}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={100} />
-                <Tooltip />
-                <Bar dataKey="days" fill={accentColor} />
+                <XAxis type="number" hide />
+                <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 10 }} interval={0} />
+                <Tooltip contentStyle={{ borderRadius: '0.5rem', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
+                <Bar dataKey="days" fill={accentColor} radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
+            <div className="text-center mt-2 text-sm text-muted">Days per Stage</div>
           </div>
-          
+
           {/* Power Distribution Chart */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4">Voting Power Distribution</h3>
+          <div className="card p-6">
+            <h3 className="text-lg font-bold mb-4">Voting Power</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
@@ -417,48 +407,49 @@ const CaseStudy = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius={80}
+                  outerRadius={70}
                   fill={accentColor}
                   dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                 >
                   {metrics.voterComposition.map((entry, index) => (
                     <Cell key={`cell-composition-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ borderRadius: '0.5rem', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
               </PieChart>
             </ResponsiveContainer>
+            <div className="text-center mt-2 text-sm text-muted">Distribution by Holder</div>
           </div>
         </div>
 
         {/* Challenges and Outcomes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Challenges */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-4">Key Challenges</h2>
-            <ul className="space-y-3">
+          <div className="card p-8">
+            <h2 className="text-2xl font-bold mb-6">Key Challenges</h2>
+            <ul className="space-y-4">
               {challenges.map((challenge, index) => (
-                <li key={`challenge-${index}`} className="flex">
-                  <span className={`inline-block w-6 h-6 rounded-full bg-${themeColor}-500 text-white flex-shrink-0 flex items-center justify-center mr-3 mt-0.5`}>
+                <li key={`challenge-${index}`} className="flex items-start">
+                  <span className={`inline-flex w-6 h-6 rounded-full text-white flex-shrink-0 items-center justify-center mr-3 mt-0.5 text-sm font-bold ${type === 'dao' ? 'bg-blue-500' : 'bg-green-500'}`}>
                     {index + 1}
                   </span>
-                  <span className="text-gray-700">{challenge}</span>
+                  <span className="text-muted">{challenge}</span>
                 </li>
               ))}
             </ul>
           </div>
-          
+
           {/* Outcomes */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-4">Outcomes</h2>
-            <ul className="space-y-3">
+          <div className="card p-8">
+            <h2 className="text-2xl font-bold mb-6">Outcomes</h2>
+            <ul className="space-y-4">
               {outcomes.map((outcome, index) => (
-                <li key={`outcome-${index}`} className="flex">
-                  <span className={`inline-block w-6 h-6 rounded-full bg-${themeColor}-500 text-white flex-shrink-0 flex items-center justify-center mr-3 mt-0.5`}>
+                <li key={`outcome-${index}`} className="flex items-start">
+                  <span className={`inline-flex w-6 h-6 rounded-full text-white flex-shrink-0 items-center justify-center mr-3 mt-0.5 text-sm font-bold ${type === 'dao' ? 'bg-blue-500' : 'bg-green-500'}`}>
                     ✓
                   </span>
-                  <span className="text-gray-700">{outcome}</span>
+                  <span className="text-muted">{outcome}</span>
                 </li>
               ))}
             </ul>
@@ -466,33 +457,33 @@ const CaseStudy = () => {
         </div>
 
         {/* Key Insights */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="card p-8 mb-8">
           <h2 className="text-2xl font-bold mb-4">Governance Insights</h2>
-          <blockquote className={`border-l-4 border-${themeColor}-500 pl-4 italic text-gray-700`}>
+          <blockquote className={`border-l-4 pl-6 italic text-lg text-muted ${type === 'dao' ? 'border-l-blue-500' : 'border-l-green-500'}`}>
             {insights}
           </blockquote>
         </div>
 
         {/* Related Case Studies */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="card p-8">
           <h2 className="text-2xl font-bold mb-6">Explore Related Case Studies</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {Object.entries(caseStudies)
               .filter(([id, study]) => id !== caseId && study.type === type)
               .slice(0, 2)
               .map(([id, study]) => (
-                <Link 
-                  key={id} 
-                  to={`/case-study/${id}`} 
-                  className={`border border-${themeColor}-200 rounded-lg p-4 hover:bg-${themeColor}-50 transition duration-300`}
+                <Link
+                  key={id}
+                  to={`/case-study/${id}`}
+                  className={`border rounded-xl p-6 transition duration-300 hover:shadow-md ${type === 'dao' ? 'border-blue-100 hover:border-blue-300 bg-blue-50/30' : 'border-green-100 hover:border-green-300 bg-green-50/30'}`}
                 >
-                  <h3 className="font-medium text-lg">{study.title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{study.organization}</p>
-                  <div className="mt-3 flex justify-between items-center">
-                    <span className={`text-xs bg-${themeColor}-100 text-${themeColor}-800 px-2 py-1 rounded`}>
-                      {study.type === 'dao' ? 'DAO Case Study' : 'Corporate Case Study'}
+                  <h3 className="font-bold text-lg mb-1">{study.title}</h3>
+                  <p className="text-sm text-muted mb-3">{study.organization}</p>
+                  <div className="flex justify-between items-center">
+                    <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${type === 'dao' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                      {study.type === 'dao' ? 'DAO' : 'Corporate'}
                     </span>
-                    <span className={`text-${themeColor}-600 text-sm`}>View Details →</span>
+                    <span className={`text-sm font-semibold ${type === 'dao' ? 'text-blue-600' : 'text-green-600'}`}>View Details →</span>
                   </div>
                 </Link>
               ))}
@@ -500,13 +491,15 @@ const CaseStudy = () => {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <p className="text-center text-gray-500 text-sm">DAO Governance Research Dashboard — Case Study Analysis</p>
-          <div className="flex justify-center mt-4 space-x-4">
-            <Link to="/" className="text-sm text-blue-600">Dashboard Home</Link>
-            <Link to="/data-sources" className="text-sm text-blue-600">Data Sources</Link>
-            <Link to="/methodology" className="text-sm text-blue-600">Research Methodology</Link>
+      <footer className="footer">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-muted text-sm mb-6">DAO Governance Research Dashboard — Case Study Analysis</p>
+          <div className="flex justify-center flex-wrap gap-6">
+            <Link to="/" className="footer-link">Dashboard Home</Link>
+            <Link to="/data-sources" className="footer-link">Data Sources</Link>
+            <Link to="/methodology" className="footer-link">Methodology</Link>
+            <Link to="/case-studies" className="footer-link">Case Studies</Link>
+            <Link to="/about" className="footer-link">About</Link>
           </div>
         </div>
       </footer>
